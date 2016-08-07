@@ -1,0 +1,8 @@
+daysintofuture:
+  - 5
+dates:
+  - 2016-08-04
+  - 2099-01-01
+stocks:
+  - YHOO
+  - AAPL
