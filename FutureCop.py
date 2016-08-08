@@ -45,7 +45,6 @@ def yahooDownloader(stockdates):
         if key[1][0]==lastWorkDay:
             continue
         shareinfo[key[0]]=Share(key[0]).get_historical(key[1][0].strftime('%Y-%m-%d') ,key[1][1].strftime('%Y-%m-%d'))
-
     return shareinfo
 
 def addingFiller(data, ndays):
@@ -67,7 +66,6 @@ def longDistanceLoading(data):
         for daydata in data[s]:
             q="('"+str(daydata['Date'])+"','"+str(daydata['Symbol'])+"',"+str(daydata['Open'])+","+str(daydata['High'])+","+str(daydata['Low'])+","+str(daydata['Close'])+","+str(daydata['Volume'])+")"+q
     q='replace into quotes (date, symbol, open, high, low, close, volume) values '+q.replace(')(','),(')+";"
-    #pdb.set_trace()
     cur.execute(q)
     db.commit()
 

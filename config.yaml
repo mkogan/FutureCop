@@ -1,9 +1,10 @@
 daysintofuture:
   - 100
 dates:
-  - 2015-01-01
+  - 2000-01-01
   - 2099-01-01
 stocks:
   - YHOO
   - AAPL
   - NFLX
+  - MSFT
