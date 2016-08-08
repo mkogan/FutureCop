@@ -16,17 +16,6 @@ db = mysql.connector.connect(host="localhost",    # your host, usually localhost
 
 cur = db.cursor()
 
-"""
-cur.execute('select 1 from quotes;')
-
-for row in cur:
-    print row
-
-cur.close()
-
-db.close()
-
-"""
 
 def start():
     with open('config.yaml','r') as f:
@@ -35,9 +24,15 @@ def start():
 def dateListBuilder(symbols,sdate,edate):
     stockdates={}
     for stock in symbols:
-        cur.execute("select max(date) from quotes where symbol='" + stock + "' and volume>0;")
-        dbdate=cur.fetchall()[0][0]
-        stockdates[stock]=[sdate,edate] if dbdate==None else [dbdate+timedelta(days=1), edate]
+        cur.execute("select min(date), max(date) from quotes where symbol='" + stock + "' and volume>0;")
+        #pdb.set_trace()
+        dbdate=cur.fetchall()[0]
+        if dbdate[0]>sdate or dbdate[0]==None:
+            cur.execute('delete from quotes where symbol="' + stock + '";')
+            db.commit()
+            stockdates[stock]=[sdate,edate]
+        else:
+            stockdates[stock]=[dbdate[1]+timedelta(days=1), edate]
 
     return stockdates
 
@@ -85,6 +80,8 @@ if __name__ == "__main__":
     quotedatafiller=addingFiller(quotedata,config['daysintofuture'][0])
     longDistanceLoading(quotedatafiller)
     print 'goodbye'
+    cur.execute('delete from quotes where date in (select * from holidays) and volume = 0;')
+    db.commit()
     cur.close()
     db.close()
     #flistp()

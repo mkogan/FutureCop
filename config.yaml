@@ -1,7 +1,7 @@
 daysintofuture:
-  - 5
+  - 100
 dates:
-  - 2016-08-04
+  - 2015-01-01
   - 2099-01-01
 stocks:
   - YHOO
