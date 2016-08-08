@@ -25,9 +25,8 @@ def dateListBuilder(symbols,sdate,edate):
     stockdates={}
     for stock in symbols:
         cur.execute("select min(date), max(date) from quotes where symbol='" + stock + "' and volume>0;")
-        #pdb.set_trace()
         dbdate=cur.fetchall()[0]
-        if dbdate[0]>sdate or dbdate[0]==None:
+        if dbdate[0] == None or dbdate[0]>sdate:
             cur.execute('delete from quotes where symbol="' + stock + '";')
             db.commit()
             stockdates[stock]=[sdate,edate]
